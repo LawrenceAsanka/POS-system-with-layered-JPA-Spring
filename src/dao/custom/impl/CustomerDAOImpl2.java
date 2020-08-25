@@ -5,7 +5,7 @@ import entity.Customer;
 
 import java.util.List;
 
-import org.hibernate.Session;
+import javax.persistence.EntityManager;
 
 public class CustomerDAOImpl2 implements CustomerDAO {
 
@@ -37,7 +37,7 @@ public class CustomerDAOImpl2 implements CustomerDAO {
     }
 
     @Override
-    public void setSession(Session session) {
+    public void setEntityManger(EntityManager session) {
 
     }
 }

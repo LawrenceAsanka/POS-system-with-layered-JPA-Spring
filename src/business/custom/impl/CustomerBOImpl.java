@@ -24,7 +24,7 @@ public class CustomerBOImpl implements CustomerBO {
   public List<CustomerTM> getAllCustomers() throws Exception {
     SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
     Session session = sessionFactory.openSession();
-    customerDAO.setSession(session);
+    customerDAO.setEntityManger(session);
     Transaction tx = null;
     List<Customer> allCustomers = null;
     try {
@@ -52,7 +52,7 @@ public class CustomerBOImpl implements CustomerBO {
   public void saveCustomer(String id, String name, String address) throws Exception {
     SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
     Session session = sessionFactory.openSession();
-    customerDAO.setSession(session);
+    customerDAO.setEntityManger(session);
     Transaction tx = null;
     try {
 
@@ -73,7 +73,7 @@ public class CustomerBOImpl implements CustomerBO {
   public void deleteCustomer(String customerId) throws Exception {
     SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
     Session session = sessionFactory.openSession();
-    customerDAO.setSession(session);
+    customerDAO.setEntityManger(session);
     Transaction tx = null;
     try {
 
@@ -94,7 +94,7 @@ public class CustomerBOImpl implements CustomerBO {
   public void updateCustomer(String name, String address, String customerId) throws Exception {
     SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
     Session session = sessionFactory.openSession();
-    customerDAO.setSession(session);
+    customerDAO.setEntityManger(session);
     Transaction tx = null;
     try {
 
@@ -116,7 +116,7 @@ public class CustomerBOImpl implements CustomerBO {
   public String getNewCustomerId() throws Exception {
     SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
     Session session = sessionFactory.openSession();
-    customerDAO.setSession(session);
+    customerDAO.setEntityManger(session);
     String lastCustomerId = null;
     Transaction tx = null;
     try {

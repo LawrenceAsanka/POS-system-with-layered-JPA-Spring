@@ -1,14 +1,15 @@
 package dao.custom.impl;
 
+import javax.persistence.EntityManager;
+
 import dao.custom.QueryDAO;
 import entity.CustomEntity;
 
-import org.hibernate.Session;
 import org.hibernate.transform.Transformers;
 
 public class QueryDAOImpl implements QueryDAO {
 
-    private  Session session;
+    private EntityManager session;
     @Override
     public CustomEntity getOrderDetail(String orderId) throws Exception {
         return (CustomEntity) session.createQuery("SELECT  o.id AS orderId, c.name AS customerName, o.date AS orderDate "
@@ -25,7 +26,7 @@ public class QueryDAOImpl implements QueryDAO {
     }
 
     @Override
-    public void setSession(Session session) {
+    public void setEntityManger(EntityManager session) {
         this.session=session;
     }
 }

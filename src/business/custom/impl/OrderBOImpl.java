@@ -44,7 +44,7 @@ public class OrderBOImpl implements OrderBO { // , Temp
 
     SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
     Session session = sessionFactory.openSession();
-    orderDAO.setSession(session);
+    orderDAO.setEntityManger(session);
     String lastOrderId = null;
     Transaction tx = null;
     try {
@@ -81,10 +81,10 @@ public class OrderBOImpl implements OrderBO { // , Temp
   public boolean placeOrder(OrderTM order, List<OrderDetailTM> orderDetails) throws Exception {
     SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
     Session session = sessionFactory.openSession();
-    orderDAO.setSession(session);
-    customerDAO.setSession(session);
-    orderDetailDAO.setSession(session);
-    itemDAO.setSession(session);
+    orderDAO.setEntityManger(session);
+    customerDAO.setEntityManger(session);
+    orderDetailDAO.setEntityManger(session);
+    itemDAO.setEntityManger(session);
     Transaction tx = null;
     try {
 

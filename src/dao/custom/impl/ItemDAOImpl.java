@@ -2,11 +2,8 @@ package dao.custom.impl;
 
 import java.util.List;
 
-import org.hibernate.Session;
-
 import dao.CrudDAOImpl;
 import dao.custom.ItemDAO;
-import entity.Customer;
 import entity.Item;
 
 public class ItemDAOImpl extends CrudDAOImpl<Item,String> implements ItemDAO {

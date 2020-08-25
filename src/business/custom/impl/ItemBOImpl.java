@@ -29,7 +29,7 @@ public class ItemBOImpl implements ItemBO {
   public String getNewItemCode() throws Exception {
     SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
     Session session = sessionFactory.openSession();
-    itemDAO.setSession(session);
+    itemDAO.setEntityManger(session);
     String lastItemCode = null;
     Transaction tx = null;
     try {
@@ -66,7 +66,7 @@ public class ItemBOImpl implements ItemBO {
   public List<ItemTM> getAllItems() throws Exception {
     SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
     Session session = sessionFactory.openSession();
-    itemDAO.setSession(session);
+    itemDAO.setEntityManger(session);
     List<Item> allItems = null;
     Transaction tx = null;
     try {
@@ -94,7 +94,7 @@ public class ItemBOImpl implements ItemBO {
   public void saveItem(String code, String description, int qtyOnHand, double unitPrice) throws Exception {
     SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
     Session session = sessionFactory.openSession();
-    itemDAO.setSession(session);
+    itemDAO.setEntityManger(session);
     Transaction tx = null;
     try {
 
@@ -115,7 +115,7 @@ public class ItemBOImpl implements ItemBO {
   public void deleteItem(String itemCode) throws Exception {
     SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
     Session session = sessionFactory.openSession();
-    itemDAO.setSession(session);
+    itemDAO.setEntityManger(session);
     Transaction tx = null;
     try {
 
@@ -136,7 +136,7 @@ public class ItemBOImpl implements ItemBO {
   public void updateItem(String description, int qtyOnHand, double unitPrice, String itemCode) throws Exception {
     SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
     Session session = sessionFactory.openSession();
-    itemDAO.setSession(session);
+    itemDAO.setEntityManger(session);
     Transaction tx = null;
     try {
 

@@ -2,11 +2,8 @@ package dao.custom.impl;
 
 import java.util.List;
 
-import org.hibernate.Session;
-
 import dao.CrudDAOImpl;
 import dao.custom.OrderDAO;
-import entity.Customer;
 import entity.Order;
 
 public class OrderDAOImpl extends CrudDAOImpl<Order,String> implements OrderDAO {
