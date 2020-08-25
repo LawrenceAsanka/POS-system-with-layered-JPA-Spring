@@ -4,15 +4,14 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
 
 import business.custom.ItemBO;
 import dao.DAOFactory;
 import dao.DAOType;
 import dao.custom.ItemDAO;
-import db.HibernateUtil;
+import db.JPAUtil;
 import entity.Item;
 import util.ItemTM;
 
@@ -27,25 +26,23 @@ public class ItemBOImpl implements ItemBO {
   }
 
   public String getNewItemCode() throws Exception {
-    SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
-    Session session = sessionFactory.openSession();
-    itemDAO.setEntityManger(session);
+    EntityManagerFactory emf = JPAUtil.getEm();
+    EntityManager em = emf.createEntityManager();
     String lastItemCode = null;
-    Transaction tx = null;
+    itemDAO.setEntityManger(em);
     try {
 
-      tx = session.beginTransaction();
-     lastItemCode = itemDAO.getLastItemCode();
+      em.getTransaction().begin();
 
-      tx.commit();
+      lastItemCode = itemDAO.getLastItemCode();
 
+      em.getTransaction().commit();
     } catch (Throwable t) {
-      tx.rollback();
+      em.getTransaction().rollback();
       throw t;
     } finally {
-      session.close();
+      em.close();
     }
-
     if (lastItemCode == null) {
       return "I001";
     } else {
@@ -64,25 +61,24 @@ public class ItemBOImpl implements ItemBO {
   }
 
   public List<ItemTM> getAllItems() throws Exception {
-    SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
-    Session session = sessionFactory.openSession();
-    itemDAO.setEntityManger(session);
+
+    EntityManagerFactory emf = JPAUtil.getEm();
+    EntityManager em = emf.createEntityManager();
     List<Item> allItems = null;
-    Transaction tx = null;
+    itemDAO.setEntityManger(em);
     try {
 
-      tx = session.beginTransaction();
+      em.getTransaction().begin();
 
       allItems = itemDAO.findAll();
 
-      tx.commit();
+      em.getTransaction().commit();
     } catch (Throwable t) {
-      tx.rollback();
+      em.getTransaction().rollback();
       throw t;
     } finally {
-      session.close();
+      em.close();
     }
-
     List<ItemTM> items = new ArrayList<>();
     for (Item item : allItems) {
       items.add(new ItemTM(item.getCode(), item.getDescription(), item.getQtyOnHand(),
@@ -92,64 +88,64 @@ public class ItemBOImpl implements ItemBO {
   }
 
   public void saveItem(String code, String description, int qtyOnHand, double unitPrice) throws Exception {
-    SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
-    Session session = sessionFactory.openSession();
-    itemDAO.setEntityManger(session);
-    Transaction tx = null;
+
+    EntityManagerFactory emf = JPAUtil.getEm();
+    EntityManager em = emf.createEntityManager();
+    itemDAO.setEntityManger(em);
     try {
 
-      tx = session.beginTransaction();
+      em.getTransaction().begin();
 
       itemDAO.save(new Item(code, description, BigDecimal.valueOf(unitPrice), qtyOnHand));
 
-      tx.commit();
+      em.getTransaction().commit();
     } catch (Throwable t) {
-      tx.rollback();
+      em.getTransaction().rollback();
       throw t;
     } finally {
-      session.close();
+      em.close();
     }
 
   }
 
   public void deleteItem(String itemCode) throws Exception {
-    SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
-    Session session = sessionFactory.openSession();
-    itemDAO.setEntityManger(session);
-    Transaction tx = null;
+
+    EntityManagerFactory emf = JPAUtil.getEm();
+    EntityManager em = emf.createEntityManager();
+    itemDAO.setEntityManger(em);
     try {
 
-      tx = session.beginTransaction();
+      em.getTransaction().begin();
 
       itemDAO.delete(itemCode);
 
-      tx.commit();
+      em.getTransaction().commit();
     } catch (Throwable t) {
-      tx.rollback();
+      em.getTransaction().rollback();
       throw t;
     } finally {
-      session.close();
+      em.close();
     }
 
   }
 
   public void updateItem(String description, int qtyOnHand, double unitPrice, String itemCode) throws Exception {
-    SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
-    Session session = sessionFactory.openSession();
-    itemDAO.setEntityManger(session);
-    Transaction tx = null;
+    EntityManagerFactory emf = JPAUtil.getEm();
+    EntityManager em = emf.createEntityManager();
+    itemDAO.setEntityManger(em);
     try {
 
-      tx = session.beginTransaction();
+      em.getTransaction().begin();
 
       itemDAO.update(new Item(itemCode, description,
           BigDecimal.valueOf(unitPrice), qtyOnHand));
-      tx.commit();
+
+      em.getTransaction().commit();
     } catch (Throwable t) {
-      tx.rollback();
+      em.getTransaction().rollback();
       throw t;
     } finally {
-      session.close();
+      em.close();
     }
 
   }

@@ -1,6 +1,7 @@
 import java.io.IOException;
 
 import db.HibernateUtil;
+import db.JPAUtil;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -12,7 +13,7 @@ public class AppInitializer extends Application {
   public static void main(String[] args) {
     launch(args);
 
-    HibernateUtil.getSessionFactory().close();
+    JPAUtil.getEm().close();
 
   }
 

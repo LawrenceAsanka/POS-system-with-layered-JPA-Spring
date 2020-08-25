@@ -4,9 +4,8 @@ import java.math.BigDecimal;
 import java.sql.Date;
 import java.util.List;
 
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
 
 import business.custom.OrderBO;
 import dao.DAOFactory;
@@ -15,7 +14,7 @@ import dao.custom.CustomerDAO;
 import dao.custom.ItemDAO;
 import dao.custom.OrderDAO;
 import dao.custom.OrderDetailDAO;
-import db.HibernateUtil;
+import db.JPAUtil;
 import entity.Item;
 import entity.Order;
 import entity.OrderDetail;
@@ -42,23 +41,23 @@ public class OrderBOImpl implements OrderBO { // , Temp
 
   public String getNewOrderId() throws Exception {
 
-    SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
-    Session session = sessionFactory.openSession();
-    orderDAO.setEntityManger(session);
+    EntityManagerFactory emf = JPAUtil.getEm();
+    EntityManager em = emf.createEntityManager();
+    orderDAO.setEntityManger(em);
     String lastOrderId = null;
-    Transaction tx = null;
+
     try {
 
-      tx = session.beginTransaction();
+      em.getTransaction().begin();
 
       lastOrderId = orderDAO.getLastOrderId();
 
-      tx.commit();
+      em.getTransaction().commit();
     } catch (Throwable t) {
-      tx.rollback();
+      em.getTransaction().rollback();
       throw t;
     } finally {
-      session.close();
+      em.close();
     }
 
     if (lastOrderId == null) {
@@ -79,16 +78,15 @@ public class OrderBOImpl implements OrderBO { // , Temp
   }
 
   public boolean placeOrder(OrderTM order, List<OrderDetailTM> orderDetails) throws Exception {
-    SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
-    Session session = sessionFactory.openSession();
-    orderDAO.setEntityManger(session);
-    customerDAO.setEntityManger(session);
-    orderDetailDAO.setEntityManger(session);
-    itemDAO.setEntityManger(session);
-    Transaction tx = null;
+    EntityManagerFactory emf = JPAUtil.getEm();
+    EntityManager em = emf.createEntityManager();
+    orderDAO.setEntityManger(em);
+    customerDAO.setEntityManger(em);
+    orderDetailDAO.setEntityManger(em);
+    itemDAO.setEntityManger(em);
     try {
 
-      tx = session.beginTransaction();
+      em.getTransaction().begin();
       orderDAO.save(new Order(order.getOrderId(),
           Date.valueOf(order.getOrderDate()),
           customerDAO.find(order.getCustomerId())));
@@ -103,14 +101,14 @@ public class OrderBOImpl implements OrderBO { // , Temp
         itemDAO.update(item);
 
       }
-      tx.commit();
+      em.getTransaction().commit();
       return true;
     } catch (Throwable t) {
-      tx.rollback();
+      em.getTransaction().rollback();
       throw t;
 
     } finally {
-      session.close();
+      em.close();
     }
   }
 }

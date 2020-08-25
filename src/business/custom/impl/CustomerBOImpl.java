@@ -3,15 +3,14 @@ package business.custom.impl;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
 
 import business.custom.CustomerBO;
 import dao.DAOFactory;
 import dao.DAOType;
 import dao.custom.CustomerDAO;
-import db.HibernateUtil;
+import db.JPAUtil;
 import entity.Customer;
 import util.CustomerTM;
 
@@ -22,23 +21,22 @@ public class CustomerBOImpl implements CustomerBO {
   private final CustomerDAO customerDAO = DAOFactory.getInstance().getDAO(DAOType.CUSTOMER);
 
   public List<CustomerTM> getAllCustomers() throws Exception {
-    SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
-    Session session = sessionFactory.openSession();
-    customerDAO.setEntityManger(session);
-    Transaction tx = null;
+    EntityManagerFactory emf = JPAUtil.getEm();
+    EntityManager em = emf.createEntityManager();
+    customerDAO.setEntityManger(em);
     List<Customer> allCustomers = null;
     try {
 
-      tx = session.beginTransaction();
+      em.getTransaction().begin();
 
       allCustomers = customerDAO.findAll();
 
-      tx.commit();
+      em.getTransaction().commit();
     } catch (Throwable t) {
-      tx.rollback();
+      em.getTransaction().rollback();
       throw t;
     } finally {
-      session.close();
+      em.close();
     }
 
     List<CustomerTM> customers = new ArrayList<>();
@@ -50,87 +48,82 @@ public class CustomerBOImpl implements CustomerBO {
   }
 
   public void saveCustomer(String id, String name, String address) throws Exception {
-    SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
-    Session session = sessionFactory.openSession();
-    customerDAO.setEntityManger(session);
-    Transaction tx = null;
+    EntityManagerFactory emf = JPAUtil.getEm();
+    EntityManager em = emf.createEntityManager();
+    customerDAO.setEntityManger(em);
     try {
 
-      tx = session.beginTransaction();
+      em.getTransaction().begin();
 
       customerDAO.save(new Customer(id, name, address));
-
-      tx.commit();
+      em.getTransaction().commit();
     } catch (Throwable t) {
-      tx.rollback();
+      em.getTransaction().rollback();
       throw t;
     } finally {
-      session.close();
+      em.close();
     }
+
 
   }
 
   public void deleteCustomer(String customerId) throws Exception {
-    SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
-    Session session = sessionFactory.openSession();
-    customerDAO.setEntityManger(session);
-    Transaction tx = null;
+    EntityManagerFactory emf = JPAUtil.getEm();
+    EntityManager em = emf.createEntityManager();
+    customerDAO.setEntityManger(em);
     try {
 
-      tx = session.beginTransaction();
+      em.getTransaction().begin();
 
       customerDAO.delete(customerId);
-
-      tx.commit();
+      em.getTransaction().commit();
     } catch (Throwable t) {
-      tx.rollback();
+      em.getTransaction().rollback();
       throw t;
     } finally {
-      session.close();
+      em.close();
     }
 
   }
 
   public void updateCustomer(String name, String address, String customerId) throws Exception {
-    SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
-    Session session = sessionFactory.openSession();
-    customerDAO.setEntityManger(session);
-    Transaction tx = null;
+    EntityManagerFactory emf = JPAUtil.getEm();
+    EntityManager em = emf.createEntityManager();
+    customerDAO.setEntityManger(em);
     try {
 
-      tx = session.beginTransaction();
+      em.getTransaction().begin();
 
       customerDAO.update(new Customer(customerId, name, address));
-
-      tx.commit();
+      em.getTransaction().commit();
     } catch (Throwable t) {
-      tx.rollback();
+      em.getTransaction().rollback();
       throw t;
     } finally {
-      session.close();
+      em.close();
     }
 
 
   }
 
   public String getNewCustomerId() throws Exception {
-    SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
-    Session session = sessionFactory.openSession();
-    customerDAO.setEntityManger(session);
+    EntityManagerFactory emf = JPAUtil.getEm();
+    EntityManager em = emf.createEntityManager();
+    customerDAO.setEntityManger(em);
     String lastCustomerId = null;
-    Transaction tx = null;
+
     try {
 
-      tx = session.beginTransaction();
+      em.getTransaction().begin();
 
       lastCustomerId = customerDAO.getLastCustomerId();
 
-      tx.commit();
+      em.getTransaction().commit();
     } catch (Throwable t) {
-      tx.rollback();
+      em.getTransaction().rollback();
       throw t;
     } finally {
-      session.close();
+      em.close();
     }
 
     if (lastCustomerId == null) {
