@@ -24,11 +24,7 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
-/**
- * FXML Controller class
- *
- * @author ranjith-suranga
- */
+
 public class MainFormController implements Initializable { 
     
     @FXML
@@ -81,11 +77,11 @@ public class MainFormController implements Initializable {
             switch(icon.getId()){
                 case "imgCustomer":
                     lblMenu.setText("Manage Customers");
-                    lblDescription.setText("Click to add, edit, delete, search or lk.ijse.dep.view customers");
+                    lblDescription.setText("Click to add, edit, delete, search or view customers");
                     break;
                 case "imgItem":
                     lblMenu.setText("Manage Items");
-                    lblDescription.setText("Click to add, edit, delete, search or lk.ijse.dep.view items");
+                    lblDescription.setText("Click to add, edit, delete, search or view items");
                     break;
                 case "imgOrder":
                     lblMenu.setText("Place Orders");

@@ -48,7 +48,6 @@ public class PlaceOrderFormController {
     public AnchorPane root;
     public Label lblId;
     public Label lblDate;
-    public JFXButton btnAddNewOrder;
     public TableView<OrderDetailTM> tblOrderDetails;
     private boolean readOnly;
 
@@ -183,9 +182,7 @@ public class PlaceOrderFormController {
         }
     }
 
-    public void btnAddNew_OnAction(ActionEvent actionEvent) {
 
-    }
 
     public void btnAdd_OnAction(ActionEvent actionEvent) {
         // Let's do some validation
@@ -322,50 +319,6 @@ public class PlaceOrderFormController {
             e.printStackTrace();
         }
     }
-
-    void initializeWithSearchOrderForm(String orderId) {
-        lblId.setText(orderId);
-        readOnly = true;
-        for (Order order : ordersDB) {
-            if (order.getId().equals(orderId)) {
-                lblDate.setText(order.getDate() + "");
-
-                // To select the customer
-                String customerId = order.getCustomerId();
-                for (CustomerTM customer : cmbCustomerId.getItems()) {
-                    if (customer.getId().equals(customerId)) {
-                        cmbCustomerId.getSelectionModel().select(customer);
-                        break;
-                    }
-                }
-
-                for (OrderDetail orderDetail : order.getOrderDetails()) {
-                    String description = null;
-                    for (ItemTM item : cmbItemCode.getItems()) {
-                        if (item.getCode().equals(orderDetail.getCode())) {
-                            description = item.getDescription();
-                            break;
-                        }
-                    }
-                    OrderDetailTM orderDetailTM = new OrderDetailTM(
-                            orderDetail.getCode(),
-                            description,
-                            orderDetail.getQty(),
-                            orderDetail.getUnitPrice(),
-                            orderDetail.getQty() * orderDetail.getUnitPrice(),
-                            null
-                    );
-                    tblOrderDetails.getItems().add(orderDetailTM);
-                    calculateTotal();
-                }
-
-                cmbCustomerId.setDisable(true);
-                cmbItemCode.setDisable(true);
-                btnSave.setDisable(true);
-                btnPlaceOrder.setVisible(false);
-                break;
-            }
-        }
-    }
+    
 
 }

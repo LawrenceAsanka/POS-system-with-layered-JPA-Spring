@@ -1,5 +1,6 @@
 package lk.ijse.dep.entity;
 
+import java.math.BigDecimal;
 import java.sql.Date;
 
 import lombok.AllArgsConstructor;
@@ -19,17 +20,14 @@ public class CustomEntity implements SuperEntity {
     private String customerName;
     private Date orderDate;
     private String customerId;
+    private BigDecimal total;
 
-    public CustomEntity(String orderId, String customerName, Date orderDate) {
+    public CustomEntity(String orderId, Date orderDate, String customerId, String customerName, BigDecimal total) {
         this.orderId = orderId;
-        this.customerName = customerName;
         this.orderDate = orderDate;
-    }
-
-    public CustomEntity(String customerId, String customerName, String orderId) {
-        this.orderId = orderId;
         this.customerName = customerName;
         this.customerId = customerId;
+        this.total = total;
     }
 
 }

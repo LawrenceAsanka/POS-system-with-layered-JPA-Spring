@@ -1,5 +1,6 @@
 package lk.ijse.dep.util;
 
+import java.sql.Date;
 import java.time.LocalDate;
 
 public class OrderTM {
@@ -19,6 +20,7 @@ public class OrderTM {
         this.customerName = customerName;
         this.orderTotal = orderTotal;
     }
+
 
     public String getOrderId() {
         return orderId;

@@ -17,7 +17,7 @@ class QueryDAOImplTest {
 
   public static void main(String[] args) throws Exception {
 
-    QueryDAO queryDAO = DAOFactory.getInstance().getDAO(DAOType.QUERY);
+    /*QueryDAO queryDAO = DAOFactory.getInstance().getDAO(DAOType.QUERY);
 
     File file = new File("resources/application.properties");
     Properties properties = new Properties();
@@ -36,7 +36,7 @@ class QueryDAOImplTest {
 
     em.getTransaction().commit();
     em.close();
-    emf.close();
+    emf.close();*/
   }
 
 }

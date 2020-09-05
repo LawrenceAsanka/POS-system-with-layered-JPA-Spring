@@ -2,6 +2,7 @@ package lk.ijse.dep.business.custom.impl;
 
 import java.math.BigDecimal;
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -10,16 +11,17 @@ import javax.persistence.EntityManagerFactory;
 import lk.ijse.dep.business.custom.OrderBO;
 import lk.ijse.dep.dao.DAOFactory;
 import lk.ijse.dep.dao.DAOType;
-import lk.ijse.dep.dao.custom.CustomerDAO;
-import lk.ijse.dep.dao.custom.ItemDAO;
-import lk.ijse.dep.dao.custom.OrderDAO;
-import lk.ijse.dep.dao.custom.OrderDetailDAO;
+import lk.ijse.dep.dao.custom.*;
 import lk.ijse.dep.db.JPAUtil;
+import lk.ijse.dep.entity.CustomEntity;
 import lk.ijse.dep.entity.Item;
 import lk.ijse.dep.entity.Order;
 import lk.ijse.dep.entity.OrderDetail;
 import lk.ijse.dep.util.OrderDetailTM;
 import lk.ijse.dep.util.OrderTM;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 
 public class OrderBOImpl implements OrderBO { // , Temp
 
@@ -27,6 +29,7 @@ public class OrderBOImpl implements OrderBO { // , Temp
   private final OrderDetailDAO orderDetailDAO = DAOFactory.getInstance().getDAO(DAOType.ORDER_DETAIL);
   private final ItemDAO itemDAO = DAOFactory.getInstance().getDAO(DAOType.ITEM);
   private final CustomerDAO customerDAO = DAOFactory.getInstance().getDAO(DAOType.CUSTOMER);
+  private final QueryDAO queryDAO = DAOFactory.getInstance().getDAO(DAOType.QUERY);
 
   // Interface through injection
 /*    @Override
@@ -109,5 +112,33 @@ public class OrderBOImpl implements OrderBO { // , Temp
     } finally {
       em.close();
     }
+  }
+
+  @Override
+  public List<OrderTM> getAllOrders() throws Exception {
+    EntityManagerFactory emf = JPAUtil.getEm();
+    EntityManager em = emf.createEntityManager();
+    queryDAO.setEntityManger(em);
+    List<CustomEntity> odl=null;
+    try {
+
+      em.getTransaction().begin();
+
+      odl = queryDAO.getOrderDetail();
+      em.getTransaction().commit();
+    } catch (Throwable t) {
+      em.getTransaction().rollback();
+      throw t;
+    } finally {
+      em.close();
+    }
+    List<OrderTM> orderDetailsList = new ArrayList<>();
+    for (CustomEntity orderDetails : odl) {
+      BigDecimal total = orderDetails.getTotal();
+
+      orderDetailsList.add(new OrderTM(orderDetails.getOrderId(),orderDetails.getOrderDate().toLocalDate(),orderDetails.getCustomerId(),
+              orderDetails.getCustomerName(),Double.parseDouble(total.toString())));
+    }
+    return orderDetailsList;
   }
 }
