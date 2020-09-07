@@ -5,10 +5,7 @@
  */
 package lk.ijse.dep.controller;
 
-import javafx.application.Application;
 import lk.ijse.dep.AppInitializer;
-import lk.ijse.dep.business.BOFactory;
-import lk.ijse.dep.business.BOType;
 import lk.ijse.dep.business.custom.CustomerBO;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;

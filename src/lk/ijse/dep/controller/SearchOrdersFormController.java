@@ -14,15 +14,11 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import lk.ijse.dep.AppInitializer;
-import lk.ijse.dep.business.BOFactory;
-import lk.ijse.dep.business.BOType;
-import lk.ijse.dep.business.custom.CustomerBO;
 import lk.ijse.dep.business.custom.OrderBO;
 import lk.ijse.dep.util.OrderTM;
 
 import java.io.IOException;
 import java.net.URL;
-import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 

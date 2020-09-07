@@ -1,8 +1,6 @@
 package lk.ijse.dep.business.custom.impl;
 
 import lk.ijse.dep.business.custom.ItemBO;
-import lk.ijse.dep.dao.DAOFactory;
-import lk.ijse.dep.dao.DAOType;
 import lk.ijse.dep.dao.custom.ItemDAO;
 import lk.ijse.dep.db.JPAUtil;
 import lk.ijse.dep.entity.Item;
@@ -22,11 +20,6 @@ public class ItemBOImpl implements ItemBO {
     // Dependency Declaration
     @Autowired
     private ItemDAO itemDAO;
-
-    public ItemBOImpl() {
-        // Constructor Injection
-        this.itemDAO = DAOFactory.getInstance().getDAO(DAOType.ITEM);
-    }
 
     public String getNewItemCode() throws Exception {
         EntityManagerFactory emf = JPAUtil.getEm();

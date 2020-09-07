@@ -1,18 +1,5 @@
 package lk.ijse.dep.dao.custom.impl;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.util.Properties;
-
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
-
-import lk.ijse.dep.dao.DAOFactory;
-import lk.ijse.dep.dao.DAOType;
-import lk.ijse.dep.dao.custom.QueryDAO;
-import lk.ijse.dep.entity.CustomEntity;
-
 class QueryDAOImplTest {
 
   public static void main(String[] args) throws Exception {
