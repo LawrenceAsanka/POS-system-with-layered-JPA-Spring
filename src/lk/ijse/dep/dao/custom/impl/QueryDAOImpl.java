@@ -1,24 +1,23 @@
 package lk.ijse.dep.dao.custom.impl;
 
-import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
-
 import lk.ijse.dep.dao.custom.QueryDAO;
 import lk.ijse.dep.entity.CustomEntity;
-import org.hibernate.transform.Transformers;
+import org.springframework.stereotype.Component;
 
+import javax.persistence.EntityManager;
 import java.math.BigDecimal;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 
+@Component
 public class QueryDAOImpl implements QueryDAO {
 
     private EntityManager entityManager;
 
     @Override
     public void setEntityManger(EntityManager entityManager) {
-        this.entityManager=entityManager;
+        this.entityManager = entityManager;
     }
 
     @Override
@@ -28,8 +27,8 @@ public class QueryDAOImpl implements QueryDAO {
                 "INNER JOIN OrderDetail od on o.id = od.orderId\n" +
                 "INNER JOIN Customer c on o.customerId = c.id\n" +
                 "GROUP BY o.id").getResultList();
-        for (Object[] result :resultList ) {
-            orderDetail.add(new CustomEntity((String) result[0],(Date) result[1],(String)result[2],(String) result[3],(BigDecimal) result[4]));
+        for (Object[] result : resultList) {
+            orderDetail.add(new CustomEntity((String) result[0], (Date) result[1], (String) result[2], (String) result[3], (BigDecimal) result[4]));
         }
         return orderDetail;
     }
