@@ -1,11 +1,5 @@
 package lk.ijse.dep.business.custom.impl;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-
 import lk.ijse.dep.business.custom.CustomerBO;
 import lk.ijse.dep.dao.DAOFactory;
 import lk.ijse.dep.dao.DAOType;
@@ -13,135 +7,144 @@ import lk.ijse.dep.dao.custom.CustomerDAO;
 import lk.ijse.dep.db.JPAUtil;
 import lk.ijse.dep.entity.Customer;
 import lk.ijse.dep.util.CustomerTM;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
-public class  CustomerBOImpl implements CustomerBO {
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import java.util.ArrayList;
+import java.util.List;
+
+@Component
+public class CustomerBOImpl implements CustomerBO {
 
 
-  // Field Injection
-  private final CustomerDAO customerDAO = DAOFactory.getInstance().getDAO(DAOType.CUSTOMER);
+    // Field Injection
+    @Autowired
+    private CustomerDAO customerDAO;
 
-  public List<CustomerTM> getAllCustomers() throws Exception {
-    EntityManagerFactory emf = JPAUtil.getEm();
-    EntityManager em = emf.createEntityManager();
-    customerDAO.setEntityManger(em);
-    List<Customer> allCustomers = null;
-    try {
+    public List<CustomerTM> getAllCustomers() throws Exception {
+        EntityManagerFactory emf = JPAUtil.getEm();
+        EntityManager em = emf.createEntityManager();
+        customerDAO.setEntityManger(em);
+        List<Customer> allCustomers = null;
+        try {
 
-      em.getTransaction().begin();
+            em.getTransaction().begin();
 
-      allCustomers = customerDAO.findAll();
+            allCustomers = customerDAO.findAll();
 
-      em.getTransaction().commit();
-    } catch (Throwable t) {
-      em.getTransaction().rollback();
-      throw t;
-    } finally {
-      em.close();
+            em.getTransaction().commit();
+        } catch (Throwable t) {
+            em.getTransaction().rollback();
+            throw t;
+        } finally {
+            em.close();
+        }
+
+        List<CustomerTM> customers = new ArrayList<>();
+        for (Customer customer : allCustomers) {
+            customers.add(new CustomerTM(customer.getId(), customer.getName(), customer.getAddress()));
+        }
+        return customers;
+
     }
 
-    List<CustomerTM> customers = new ArrayList<>();
-    for (Customer customer : allCustomers) {
-      customers.add(new CustomerTM(customer.getId(), customer.getName(), customer.getAddress()));
-    }
-    return customers;
+    public void saveCustomer(String id, String name, String address) throws Exception {
+        EntityManagerFactory emf = JPAUtil.getEm();
+        EntityManager em = emf.createEntityManager();
+        customerDAO.setEntityManger(em);
+        try {
 
-  }
+            em.getTransaction().begin();
 
-  public void saveCustomer(String id, String name, String address) throws Exception {
-    EntityManagerFactory emf = JPAUtil.getEm();
-    EntityManager em = emf.createEntityManager();
-    customerDAO.setEntityManger(em);
-    try {
+            customerDAO.save(new Customer(id, name, address));
+            em.getTransaction().commit();
+        } catch (Throwable t) {
+            em.getTransaction().rollback();
+            throw t;
+        } finally {
+            em.close();
+        }
 
-      em.getTransaction().begin();
 
-      customerDAO.save(new Customer(id, name, address));
-      em.getTransaction().commit();
-    } catch (Throwable t) {
-      em.getTransaction().rollback();
-      throw t;
-    } finally {
-      em.close();
     }
 
+    public void deleteCustomer(String customerId) throws Exception {
+        EntityManagerFactory emf = JPAUtil.getEm();
+        EntityManager em = emf.createEntityManager();
+        customerDAO.setEntityManger(em);
+        try {
 
-  }
+            em.getTransaction().begin();
 
-  public void deleteCustomer(String customerId) throws Exception {
-    EntityManagerFactory emf = JPAUtil.getEm();
-    EntityManager em = emf.createEntityManager();
-    customerDAO.setEntityManger(em);
-    try {
+            customerDAO.delete(customerId);
+            em.getTransaction().commit();
+        } catch (Throwable t) {
+            em.getTransaction().rollback();
+            throw t;
+        } finally {
+            em.close();
+        }
 
-      em.getTransaction().begin();
-
-      customerDAO.delete(customerId);
-      em.getTransaction().commit();
-    } catch (Throwable t) {
-      em.getTransaction().rollback();
-      throw t;
-    } finally {
-      em.close();
     }
 
-  }
+    public void updateCustomer(String name, String address, String customerId) throws Exception {
+        EntityManagerFactory emf = JPAUtil.getEm();
+        EntityManager em = emf.createEntityManager();
+        customerDAO.setEntityManger(em);
+        try {
 
-  public void updateCustomer(String name, String address, String customerId) throws Exception {
-    EntityManagerFactory emf = JPAUtil.getEm();
-    EntityManager em = emf.createEntityManager();
-    customerDAO.setEntityManger(em);
-    try {
+            em.getTransaction().begin();
 
-      em.getTransaction().begin();
+            customerDAO.update(new Customer(customerId, name, address));
+            em.getTransaction().commit();
+        } catch (Throwable t) {
+            em.getTransaction().rollback();
+            throw t;
+        } finally {
+            em.close();
+        }
 
-      customerDAO.update(new Customer(customerId, name, address));
-      em.getTransaction().commit();
-    } catch (Throwable t) {
-      em.getTransaction().rollback();
-      throw t;
-    } finally {
-      em.close();
+
     }
 
+    public String getNewCustomerId() throws Exception {
+        EntityManagerFactory emf = JPAUtil.getEm();
+        EntityManager em = emf.createEntityManager();
+        customerDAO.setEntityManger(em);
+        String lastCustomerId = null;
 
-  }
+        try {
 
-  public String getNewCustomerId() throws Exception {
-    EntityManagerFactory emf = JPAUtil.getEm();
-    EntityManager em = emf.createEntityManager();
-    customerDAO.setEntityManger(em);
-    String lastCustomerId = null;
+            em.getTransaction().begin();
 
-    try {
+            lastCustomerId = customerDAO.getLastCustomerId();
 
-      em.getTransaction().begin();
+            em.getTransaction().commit();
+        } catch (Throwable t) {
+            em.getTransaction().rollback();
+            throw t;
+        } finally {
+            em.close();
+        }
 
-      lastCustomerId = customerDAO.getLastCustomerId();
+        if (lastCustomerId == null) {
+            return "C001";
+        } else {
+            int maxId = Integer.parseInt(lastCustomerId.replace("C", ""));
+            maxId = maxId + 1;
+            String id = "";
+            if (maxId < 10) {
+                id = "C00" + maxId;
+            } else if (maxId < 100) {
+                id = "C0" + maxId;
+            } else {
+                id = "C" + maxId;
+            }
+            return id;
+        }
 
-      em.getTransaction().commit();
-    } catch (Throwable t) {
-      em.getTransaction().rollback();
-      throw t;
-    } finally {
-      em.close();
     }
-
-    if (lastCustomerId == null) {
-      return "C001";
-    } else {
-      int maxId = Integer.parseInt(lastCustomerId.replace("C", ""));
-      maxId = maxId + 1;
-      String id = "";
-      if (maxId < 10) {
-        id = "C00" + maxId;
-      } else if (maxId < 100) {
-        id = "C0" + maxId;
-      } else {
-        id = "C" + maxId;
-      }
-      return id;
-    }
-
-  }
 
 }
