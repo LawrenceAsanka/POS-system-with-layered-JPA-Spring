@@ -12,6 +12,7 @@ import javafx.stage.Stage;
 public class AppInitializer extends Application {
 
   public static void main(String[] args) {
+
     launch(args);
 
     JPAUtil.getEm().close();

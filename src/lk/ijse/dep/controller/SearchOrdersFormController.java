@@ -39,18 +39,27 @@ public class SearchOrdersFormController {
         tblOrders.getColumns().get(3).setCellValueFactory(new PropertyValueFactory<>("customerName"));
         tblOrders.getColumns().get(4).setCellValueFactory(new PropertyValueFactory<>("orderTotal"));
 
-        //getAllOrders();
+        getAllOrders();
 
         txtSearch.textProperty().addListener(new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-
+                tblOrders.getItems().clear();
+                for (OrderTM orderDetail : orderArrayList) {
+                    if (orderDetail.getOrderId().contains(newValue) ||
+                            orderDetail.getOrderDate().toString().contains(newValue) ||
+                            orderDetail.getCustomerId().contains(newValue) ||
+                            orderDetail.getCustomerName().contains(newValue) ||
+                            (String.valueOf(orderDetail.getOrderTotal()).contains(newValue))) {
+                        tblOrders.getItems().add(orderDetail);
+                    }
+                }
             }
         });
 
     }
 
- /*   private void getAllOrders() {
+    private void getAllOrders() {
         tblOrders.getItems().clear();
         List<OrderTM> allOrders = null;
         try {
@@ -67,7 +76,7 @@ public class SearchOrdersFormController {
                         orders.getOrderTotal()));
             }
         }
-    }*/
+    }
 
     @FXML
     private void navigateToHome(MouseEvent event) throws IOException {
