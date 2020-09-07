@@ -13,8 +13,10 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
+import lk.ijse.dep.AppInitializer;
 import lk.ijse.dep.business.BOFactory;
 import lk.ijse.dep.business.BOType;
+import lk.ijse.dep.business.custom.CustomerBO;
 import lk.ijse.dep.business.custom.OrderBO;
 import lk.ijse.dep.util.OrderTM;
 
@@ -29,7 +31,7 @@ public class SearchOrdersFormController {
     public TableView<OrderTM> tblOrders;
     List<OrderTM> orderArrayList = new ArrayList<>();
 
-    private final OrderBO orderBO = BOFactory.getInstance().getBO(BOType.ORDER);
+    private final OrderBO orderBO = AppInitializer.getCtx().getBean(OrderBO.class);
 
     public void initialize() {
 
