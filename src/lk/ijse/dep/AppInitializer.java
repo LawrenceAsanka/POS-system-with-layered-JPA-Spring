@@ -8,10 +8,20 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 public class AppInitializer extends Application {
 
+  private static AnnotationConfigApplicationContext ctx;
+
+  public static AnnotationConfigApplicationContext getCtx(){
+    return ctx;
+  }
   public static void main(String[] args) {
+    ctx = new AnnotationConfigApplicationContext();
+    ctx.registerShutdownHook();
+    ctx.register(AppConfig.class);
+    ctx.refresh();
 
     launch(args);
 
